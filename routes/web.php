@@ -12,6 +12,7 @@
  */
 Route::get('/facebook', 'HomeController@getFacebook');
 Route::get('/facebook-callback', 'HomeController@getFacebookCallback');
+
 Route::get('/', function () {
     return view('welcome');
 });
