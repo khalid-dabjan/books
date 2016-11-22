@@ -10,9 +10,18 @@
   | contains the "web" middleware group. Now create something great!
   |
  */
-Route::get('/facebook', 'HomeController@getFacebook');
-Route::get('/facebook-callback', 'HomeController@getFacebookCallback');
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
+Route::get('/facebook', 'Auth\RegisterController@getFacebook');
+Route::get('/facebook-callback', 'Auth\RegisterController@getFacebookCallback');
+Route::get('/twitter', 'Auth\RegisterController@getTwitter');
+Route::get('/twitter-callback', 'Auth\RegisterController@getTwitterCallback');
+Route::get('/google', 'Auth\RegisterController@getGoogle');
+Route::get('/google-callback', 'Auth\RegisterController@getGoogleCallback');
