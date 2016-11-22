@@ -36,4 +36,14 @@ return [
         'client_secret' => '8f8222c771145400fcf9060bea9cf153',
         'redirect' => 'http://books.dev/facebook-callback',
     ],
+    'twitter' => [
+        'client_id' => '8UtVhH4KiwnkBrpalfEHkSzSm',
+        'client_secret' => 'vw08Gso7dMDv8vkapw1MoyVBC1Pw8FHeOyEDxFSdec6jmA6MsX',
+        'redirect' => 'http://books.dev/twitter-callback',
+    ],
+    'google' => [
+        'client_id' => '313208046462-j153goj7a8ut7ksu1hbm3c7kqop8mqj3.apps.googleusercontent.com',
+        'client_secret' => 'xUw99mMI14HsYiy6b3oTjKAW',
+        'redirect' => 'http://books.dev/google-callback',
+    ],
 ];
