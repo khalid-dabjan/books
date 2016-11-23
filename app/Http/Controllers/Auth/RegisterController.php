@@ -72,12 +72,20 @@ use RegistersUsers;
 
     public function getFacebookCallback(User $user) {
         $providerUser = \Socialite::driver('facebook')->user();
-
+        
+        if($providerUser->email == null){
+             $providerUser->email = $providerUser->getId().'@facebook.com';
+        }
+        
         $checkUser = User::where('email', $providerUser->email)->where('registered_from', 'facebook')->first();
+        
         if ($checkUser) {
             Auth::login($checkUser);
             return redirect('home');
         }
+        
+        
+        
         $user->provider_id = $providerUser->getId();
         $user->name = $providerUser->getName();
         $user->email = $providerUser->getEmail();
@@ -117,7 +125,13 @@ use RegistersUsers;
 
     public function getGoogleCallback(User $user) {
         $providerUser = \Socialite::driver('google')->user();
+       
+        if($providerUser->email == null){
+             $providerUser->email = $providerUser->getId().'@google.com';
+        }
+        
         $checkUser = User::where('email', $providerUser->email)->where('registered_from', 'google')->first();
+       
         if ($checkUser) {
             Auth::login($checkUser);
             return redirect('home');
@@ -131,5 +145,32 @@ use RegistersUsers;
         Auth::login($user);
         return redirect('home');
     }
+    
+    public function getGoodreads() {
+        return \Socialite::with('goodreads')->redirect();
+    }
+    
+    public function getGoodreadsCallback(User $user) {  
+         $providerUser = \Socialite::driver('goodreads')->user();
+       dd($providerUser);
+        if($providerUser->email == null){
+             $providerUser->email = $providerUser->getId().'@goodreads.com';
+        }
+        
+        $checkUser = User::where('email', $providerUser->email)->where('registered_from', 'goodreads')->first();
+       
+        if ($checkUser) {
+            Auth::login($checkUser);
+            return redirect('home');
+        }
+        $user->provider_id = $providerUser->getId();
+        $user->name = $providerUser->getName();
+        $user->email = $providerUser->getEmail();
+        $user->registered_from = 'goodreads';
+        $user->save();
 
+        Auth::login($user);
+        return redirect('home');
+        
+    }
 }

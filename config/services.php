@@ -46,4 +46,5 @@ return [
         'client_secret' => 'xUw99mMI14HsYiy6b3oTjKAW',
         'redirect' => 'http://books.dev/google-callback',
     ],
+   
 ];
