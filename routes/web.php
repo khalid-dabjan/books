@@ -25,3 +25,5 @@ Route::get('/twitter', 'Auth\RegisterController@getTwitter');
 Route::get('/twitter-callback', 'Auth\RegisterController@getTwitterCallback');
 Route::get('/google', 'Auth\RegisterController@getGoogle');
 Route::get('/google-callback', 'Auth\RegisterController@getGoogleCallback');
+Route::get('/goodreads', 'Auth\RegisterController@getGoodreads');
+Route::get('/goodreads-callback', 'Auth\RegisterController@getGoodreadsCallback');

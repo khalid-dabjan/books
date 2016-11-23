@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "047f1ef61ebff98bd20e092ef20babfa",
-    "content-hash": "d3ac5d4ad84f2c77d9583e86f5843f36",
+    "hash": "7983ab41e03297e2a06dceaff1ad690f",
+    "content-hash": "ab7748f73cbb3166ad50eaa73a6a3870",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1723,6 +1723,85 @@
                 "uuid"
             ],
             "time": "2016-10-02 15:51:17"
+        },
+        {
+            "name": "socialiteproviders/goodreads",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SocialiteProviders/Goodreads.git",
+                "reference": "3c4c6b67fdfd8a729a8cdcfd37c8d7989055adba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SocialiteProviders/Goodreads/zipball/3c4c6b67fdfd8a729a8cdcfd37c8d7989055adba",
+                "reference": "3c4c6b67fdfd8a729a8cdcfd37c8d7989055adba",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "socialiteproviders/manager": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SocialiteProviders\\Goodreads\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "DraperStudio",
+                    "email": "hello@draperstud.io"
+                }
+            ],
+            "description": "Goodreads OAuth1 Provider for Laravel Socialite",
+            "time": "2016-04-07 21:15:00"
+        },
+        {
+            "name": "socialiteproviders/manager",
+            "version": "v2.1.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SocialiteProviders/Manager.git",
+                "reference": "904283bdc4fa149f7455cc29f0bbcafa181149f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SocialiteProviders/Manager/zipball/904283bdc4fa149f7455cc29f0bbcafa181149f2",
+                "reference": "904283bdc4fa149f7455cc29f0bbcafa181149f2",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/socialite": "~2.0",
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.4",
+                "phpunit/phpunit": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SocialiteProviders\\Manager\\": "src/",
+                    "SocialiteProviders\\Manager\\Test\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Wendt",
+                    "email": "andy@awendt.com"
+                }
+            ],
+            "description": "Easily add new or override built-in providers in Laravel Socialite.",
+            "time": "2016-11-01 08:49:52"
         },
         {
             "name": "swiftmailer/swiftmailer",
