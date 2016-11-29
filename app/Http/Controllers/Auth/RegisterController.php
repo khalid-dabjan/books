@@ -156,6 +156,8 @@ use RegistersUsers;
     public function getGoodreadsCallback(User $user) {  
         
          $providerUser = \Socialite::driver('goodreads')->user();
+        
+         
         if($providerUser->email == null){
              $providerUser->email = $providerUser->getId().'@goodreads.com';
         }

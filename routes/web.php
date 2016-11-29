@@ -10,6 +10,9 @@
   | contains the "web" middleware group. Now create something great!
   |
  */
+Route::get('updateProfile','UsersController@getUpdateProfile');
+Route::get('updateProfile/addresses','UsersController@getAddresses');
+Route::post('geoLocation','UsersController@saveGeoLocation');
 
 
 Route::get('/', function () {
