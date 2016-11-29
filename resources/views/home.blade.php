@@ -10,6 +10,9 @@
                 <div class="panel-body">
                     You are logged in!
                 </div>
+                <div>
+                     <a href="{{ url('/updateProfile') }}"> Update You're Profile </a>
+                </div>
             </div>
         </div>
     </div>
