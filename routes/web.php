@@ -13,6 +13,10 @@
 Route::get('updateProfile','UsersController@getUpdateProfile');
 Route::get('updateProfile/addresses','UsersController@getAddresses');
 Route::post('geoLocation','UsersController@saveGeoLocation');
+Route::get('updateProfile/addressesList','UsersController@getAddressesList');
+Route::get('updateProfile/addresses/{location}/edit','UsersController@getAddressesEdit');
+Route::post('updateProfile/addresses/{location}/update','UsersController@updateGeoLocation');
+Route::delete('updateProfile/addresses/{location}/delete','UsersController@deleteGeoLocation');
 
 
 Route::get('/', function () {
