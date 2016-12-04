@@ -32,10 +32,18 @@ class User extends Authenticatable
     }
     
     public function books() {
-        return $this->belongsToMany(Book::class,'books_users');
+        return $this->belongsToMany(Book::class,'books_users')->withPivot('status');
     }
     
-    public function users() {
-        return $this->belongsToMany(User::class,('followers_users'));
+    public function followers() {
+        return $this->belongsToMany(User::class,'followers_users','followee_id','follower_id')->withPivot('type');
+    }
+    
+    public function followings() {
+        return $this->belongsToMany(User::class,'followers_users','follower_id','followee_id')->withPivot('type');
+    }
+    
+    public function getUserIsFollowingAttribute() {
+        return  (auth()->check())?in_array($this->id,auth()->user()->followings->pluck('id')->toArray()):false;
     }
 }

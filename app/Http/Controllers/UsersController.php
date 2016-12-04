@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Book;
 use App\Location;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller {
+
+    public function __construct() {
+        $this->middleware('auth');
+    }
 
     public function getUpdateProfile() {
         return view('users.updateProfile');
@@ -79,7 +84,27 @@ class UsersController extends Controller {
     }
 
     public function getUserProfile(User $user) {
-        return view('users.userProfile', compact('user'));
+        $books = $user->books;
+
+
+        return view('users.userProfile', compact('user', 'books'));
     }
+
+    public function theFollowing(Request $request, User $user) {
+        $followerId = auth()->user()->id;
+        
+
+        if ($followerId == $user->id) {
+            abort(403, ' Unautherized Action.');
+        }
+        if ($user->user_is_following) {
+            $user->followers()->detach($followerId);
+        } else {
+            $user->followers()->attach($followerId, ['type' => $request->get('type')]);
+        }
+        return redirect('/home');
+    }
+
+    
 
 }
