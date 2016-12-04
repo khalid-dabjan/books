@@ -73,6 +73,10 @@
                     @else
                         <a href="{{ url('/login') }}">Login</a>
                         <a href="{{ url('/register') }}">Register</a>
+                        <a href="{{ url('/google') }}">Google Login</a>
+                        <a href="{{ url('/twitter') }}">twitter Login</a>
+                        <a href="{{ url('/facebook') }}">facebook Login</a>
+                        
                     @endif
                 </div>
             @endif

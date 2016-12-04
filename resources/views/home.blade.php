@@ -11,7 +11,17 @@
                     You are logged in!
                 </div>
                 <div>
-                     <a href="{{ url('/updateProfile') }}"> Update You're Profile </a>
+                    <ul>
+                        <li>
+                            <a href="{{ url('/usersList') }}"> Users </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/updateProfile') }}"> Update You're Profile </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/booksList') }}"> Add Books </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

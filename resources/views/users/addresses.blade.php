@@ -6,6 +6,9 @@
         width: 100%;
     }
 </style>
+<div class='pull-right'> 
+    <a href="{{ url('/home') }}">Home</a>
+</div>
 <form method='POST'  action='/geoLocation'> 
     {{ csrf_field() }}
     <div class="class-form{{ $errors->has('name')?'has-error':'' }}">
@@ -22,6 +25,8 @@
         <button type='submit' class='submittingNewGeolocaion btn'> Submit you're address</button>
     </div>
 </form>
+
+
 
 <div id="map">
 </div>
