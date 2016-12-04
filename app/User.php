@@ -30,4 +30,12 @@ class User extends Authenticatable
     public function locations() {
         return $this->hasMany(Location::class);
     }
+    
+    public function books() {
+        return $this->belongsToMany(Book::class,'books_users');
+    }
+    
+    public function users() {
+        return $this->belongsToMany(User::class,('followers_users'));
+    }
 }

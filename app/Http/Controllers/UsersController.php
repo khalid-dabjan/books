@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Location;
 use App\User;
+use App\Location;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller {
@@ -36,12 +36,12 @@ class UsersController extends Controller {
 
     public function getAddressesList() {
         $locations = auth()->user()->locations;
-        
+
         return view('users.addressesList', compact('locations'));
     }
 
     public function getAddressesEdit(Location $location) {
-            $user = auth()->user();
+        $user = auth()->user();
         if ($user->id !== $location->user_id) {
             abort(403, 'Unautherized action.');
         }
@@ -71,6 +71,15 @@ class UsersController extends Controller {
     public function deleteGeoLocation(Location $location) {
         $location->delete();
         return redirect('updateProfile');
+    }
+
+    public function getUsersList() {
+        $users = User::get();
+        return view('users.usersList', compact('users'));
+    }
+
+    public function getUserProfile(User $user) {
+        return view('users.userProfile', compact('user'));
     }
 
 }
