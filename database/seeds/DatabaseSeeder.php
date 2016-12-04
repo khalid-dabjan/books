@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder {
 
-    protected $toTruncate = ['books'];
+    protected $toTruncate = ['books','authers'];
 
     public function run() {
         

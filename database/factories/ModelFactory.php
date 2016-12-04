@@ -33,3 +33,12 @@ $factory->define(App\Book::class, function (Faker\Generator $faker) {
         'cover' => $faker->imageUrl(300, 200, 'cats') 
     ];
 });
+
+$factory->define(App\Auther::class, function (Faker\Generator $faker) {
+
+    return [
+        'name' => $faker->name,
+        'description' => $faker->paragraph,
+        'image' => $faker->imageUrl(300, 200, 'cats') 
+    ];
+});

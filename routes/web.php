@@ -11,7 +11,9 @@
   |
  */
 Route::get('usersList','UsersController@getUsersList');
-Route::get('usersList/{$user}/userProfile','UsersController@getUserProfile');
+Route::get('usersList/{user}/userProfile','UsersController@getUserProfile');
+Route::post('usersList/{user}/follow','UsersController@theFollowing');
+
 
 Route::get('updateProfile','UsersController@getUpdateProfile');
 Route::get('updateProfile/addresses','UsersController@getAddresses');
@@ -25,6 +27,8 @@ Route::get('booksList',"BooksController@getBooksList");
 Route::get('booksList/{book}/add',"BooksController@getBook");
 Route::post('booksList/{book}/add',"BooksController@addBook");
 Route::delete('booksList/{book}/delete',"BooksController@deleteBook");
+
+Route::get('authersList',"AuthersController@getAuthersList");
 
 Route::get('/', function () {
     return view('welcome');
