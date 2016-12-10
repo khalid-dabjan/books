@@ -8,28 +8,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\BookMatch;
 
-class BooksController extends Controller {
+class BooksController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth')->only(['addBook', 'deleteBook']);
     }
 
-    public function getBooksList() {
+    public function getBooksList()
+    {
         $books = Book::get();
         return view('books.booksList', compact('books'));
     }
 
-    public function getBook(Book $book) {
+    public function getBook(Book $book)
+    {
         return view('books.addBook', compact('book'));
     }
 
-    public function addBook(Request $request, Book $book) {
+    public function addBook(Request $request, Book $book)
+    {
         $user = auth()->user();
         $user->books()->attach($book->id, ['status' => $request->get('status')]);
         return redirect('/home');
     }
 
-    public function deleteBook(Book $book) {
+    public function deleteBook(Book $book)
+    {
         $user = auth()->user();
         if ($user->books()) {
             $user->books()->detach($book->id);
@@ -39,27 +45,54 @@ class BooksController extends Controller {
         return redirect('/home');
     }
 
-    public function comparingCoordinates(
-    $latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000) {
-        // convert from degrees to radians
-        $latFrom = deg2rad($latitudeFrom);
-        $lonFrom = deg2rad($longitudeFrom);
-        $latTo = deg2rad($latitudeTo);
-        $lonTo = deg2rad($longitudeTo);
-
-        $latDelta = $latTo - $latFrom;
-        $lonDelta = $lonTo - $lonFrom;
-
-        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
-                                cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
-        return $angle * $earthRadius;
-    }
-
-    public function comparingBooks() {
+    public function comparingBooks()
+    {
         $users = User::get();
-        foreach ($users as $user) {
-            $wantBooks = $user->books()->where('status', 'want')->get();
+        foreach ($users as $wantUser) {
+            $wantBooks = $wantUser->books()->where('status', 'want')->get();
+            foreach ($wantBooks as $wantBook) {
+                $haveUsers = User::whereHas('booksHave', function($q) use ($wantBook) {
+                            $q->where('books.id', $wantBook->id);
+                        })->get();
+//                dd($haveUsers->first()->notifications);
+                foreach ($haveUsers as $haveUser) {
+                    foreach ($wantUser->locations as $wantUserLocation) {
+                        foreach ($haveUser->locations as $haveUserLocation) {
+                            $distance = Book::comparingCoordinates((float) $haveUserLocation->latitude, (float) $haveUserLocation->longitude
+                                            , (float) $wantUserLocation->latitude, (float) $wantUserLocation->longitude) / 1000;
+                            if ($distance < 10) {//KM
+//                                dd($distance);
+//                                        notify the user who wants the Book 
+                                $wantUser->myNotify(new BookMatch('want_user_match',$haveUser->id, $wantBook->id, $haveUserLocation->id, $wantUserLocation->id));
+                                $haveUser->myNotify(new BookMatch('have_user_match',$wantUser->id, $wantBook->id, $haveUserLocation->id, $wantUserLocation->id));
+//                                        notify the user who have the Book 
+//                                $userHaveBook->notify(new BookMatch);
+                            }
+                        }
+                    }
+                }
+            }
+die;
+
+
+
+
+
             $userWantLat = $user->locations->pluck('latitude');
+            foreach ($user->locations as $location) {
+                dd($location);
+            }
+
+
+
+
+
+
+
+
+
+
+            dd($userWantLat);
             foreach ($userWantLat as $latWant) {
                 $floatLatWant = (float) $latWant;
                 $userWantLng = $user->locations->pluck('longitude');
@@ -85,7 +118,7 @@ class BooksController extends Controller {
 
         $distance = BooksController::comparingCoordinates($floatLatWant, $floatLngWant, $floatLatHave, $floatLngHave) / 1000;
 
-        if ($distance > 10) {
+        if ($distance < 10) {
 //                                        notify the user who wants the Book 
             $user->notify(new BookMatch);
 //                                        notify the user who have the Book 
