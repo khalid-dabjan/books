@@ -2,6 +2,7 @@
 @section('content')
 
 
+
 <div class="container" >
     <form method="POST" action="/usersList/{{ $user->id }}/follow">
         {{csrf_field()}}
@@ -11,7 +12,6 @@
                     <tr>
                         <th>User Name</th>
                         <th>status</th>
-                        <th>auther/user</th>
                     </tr>
                 </thead>
                 <tbody> 
@@ -21,14 +21,8 @@
                         </td>
                         <td>
                             <button type="submit" class="btn btn-primary">
-                            {{ $user->user_is_following?'Unfollow User':'Follow User' }} 
+                            {{ $user->user_is_following_user?'Unfollow User':'Follow User' }} 
                             </button>
-                        </td>
-                        <td>
-                            <select name="type">
-                                <option value="auther">auther</option>
-                                <option value="user">user</option>
-                            </select>
                         </td>
                     </tr>
                 </tbody>

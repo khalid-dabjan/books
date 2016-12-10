@@ -5,17 +5,16 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class EventServiceProvider extends ServiceProvider
-{
+class EventServiceProvider extends ServiceProvider {
+
     /**
      * The event listener mappings for the application.
      *
      * @var array
      */
     protected $listen = [
-        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-            // add your listeners (aka providers) here
-            'SocialiteProviders\Goodreads\GoodreadsExtendSocialite@handle',
+        'App\Events\comparingBooks' => [
+            'App\Listeners\SendMatchFoundNotification',
         ],
     ];
 
@@ -24,10 +23,12 @@ class EventServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
+    public function boot() {
         parent::boot();
 
-        //
+        Event::listen('comparingBooks', function($foo) {
+            echo $foo;
+        });
     }
+
 }
