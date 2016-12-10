@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Auther;
 use App\Book;
 use App\Location;
 use Illuminate\Http\Request;
@@ -80,7 +81,8 @@ class UsersController extends Controller {
 
     public function getUsersList() {
         $users = User::get();
-        return view('users.usersList', compact('users'));
+        $authers = Auther::get();
+        return view('users.usersList', compact('users','authers'));
     }
 
     public function getUserProfile(User $user) {
@@ -97,10 +99,10 @@ class UsersController extends Controller {
         if ($followerId == $user->id) {
             abort(403, ' Unautherized Action.');
         }
-        if ($user->user_is_following) {
+        if ($user->user_is_following_user) {
             $user->followers()->detach($followerId);
         } else {
-            $user->followers()->attach($followerId, ['type' => $request->get('type')]);
+            $user->followers()->attach($followerId, ['type' => 'user']);
         }
         return redirect('/home');
     }

@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\SomeEvent;
+use App\Events\comparingBooks;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EventListener
+class SendMatchFoundNotification
 {
     /**
      * Create the event listener.
@@ -21,11 +21,11 @@ class EventListener
     /**
      * Handle the event.
      *
-     * @param  SomeEvent  $event
+     * @param  comparingBooks  $event
      * @return void
      */
-    public function handle(SomeEvent $event)
+    public function handle(BookMatch $event)
     {
-        //
+        if
     }
 }

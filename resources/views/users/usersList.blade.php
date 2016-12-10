@@ -38,22 +38,22 @@
 
             <thead> 
                 <tr>
-                    <th>User Name</th>
-                    <th>User Provider</th>
-                    <th>Registered At</th>
+                    <th>Auther Name</th>
+                    <th>Auther Description</th>
+                    <th>Auther Image</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($users as $user)
+                @foreach($authers as $auther)
                 <tr>
                     <td>
-                        <a href='/usersList/{{$user->id}}/userProfile'>{{ $user->name }}</a>
+                        <a href='/usersList/{{$auther->id}}/autherProfile'>{{ $auther->name }}</a>
                     </td>
                      <td>
-                        {{ $user->registered_from }}
+                        {{ $auther->description }}
                     </td>
                     <td>
-                        {{ $user->created_at }}
+                        {{ $auther->image }}
                     </td>
                 </tr>
                 @endforeach

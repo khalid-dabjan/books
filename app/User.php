@@ -43,7 +43,10 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class,'followers_users','follower_id','followee_id')->withPivot('type');
     }
     
-    public function getUserIsFollowingAttribute() {
+    public function getUserIsFollowingUserAttribute() {
         return  (auth()->check())?in_array($this->id,auth()->user()->followings->pluck('id')->toArray()):false;
+    }
+    public function authers() {
+       return $this->belongstoMany(Auther::class,'followers_users','follower_id','followee_id')->withPivot('type');
     }
 }

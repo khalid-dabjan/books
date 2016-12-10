@@ -21,9 +21,7 @@
                         <li>
                             <a href="{{ url('/booksList') }}"> Add Books </a>
                         </li>
-                        <li>
-                            <a href="{{ url('/authersList') }}"> Authers </a>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
