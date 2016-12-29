@@ -3,6 +3,23 @@
 
 
 
+<ul>
+    <li class='dropdown'>
+        <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button'>
+            Notifications
+        </a>
+        @foreach($user->unreadNotifications as $notification)
+
+        <ul class="dropdown-menu">
+
+            <li class="markedRead"><a href='/usersList/{{ $notification->data["matche_user_id"] }}/userProfile'>Match Found with You and:{{ App\User::find($notification->data['matche_user_id'])->name}}</a></li>
+            <li>For the Book::find{{ App\Book::find($notification->data['book_id'])->title }}</li>
+            <li>at:{{ App\Location::find($notification->data['have_location_id'])->name }}</li>
+
+        </ul>
+        @endforeach
+    </li>
+</ul>
 <div class="container" >
     <form method="POST" action="/usersList/{{ $user->id }}/follow">
         {{csrf_field()}}
@@ -21,7 +38,7 @@
                         </td>
                         <td>
                             <button type="submit" class="btn btn-primary">
-                            {{ $user->user_is_following_user?'Unfollow User':'Follow User' }} 
+                                {{ $user->user_is_following_user?'Unfollow User':'Follow User' }} 
                             </button>
                         </td>
                     </tr>
@@ -106,5 +123,15 @@
         </table>
     </div>
 </form>
+<script type="text/javascript">
+    $(.markedRead).onclick(function(){
+        $.ajax({
+            url:'/markRead',
+            type:'post',
+            
+        });
+    });
+
+</script>
 
 @endsection

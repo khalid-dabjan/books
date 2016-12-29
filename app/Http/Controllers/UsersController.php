@@ -7,6 +7,8 @@ use App\Auther;
 use App\Book;
 use App\Location;
 use Illuminate\Http\Request;
+use App\Notifications\BookMatch;
+
 
 class UsersController extends Controller {
 
