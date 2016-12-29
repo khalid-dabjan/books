@@ -70,11 +70,11 @@ class User extends Authenticatable
 
     public function myNotify($instance)
     {
-        $isNotified = \Illuminate\Support\Facades\DB::table('notifications')->where('notifiable_id', $this->id)
-                        ->where('data->type', $instance->type)
-                        ->where('data->matche_user_id')
-                        ->where('data->book_id')->count();
-        dd($isNotified);
+//        $isNotified = \Illuminate\Support\Facades\DB::table('notifications')->where('notifiable_id', $this->id)
+//                        ->where('data->type', $instance->type)
+//                        ->where('data->matche_user_id')
+//                        ->where('data->book_id')->count();
+//        dd($isNotified);
         $this->notify($instance);
     }
 

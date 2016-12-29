@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
 
-    public function auther()
+    public function authers()
     {
         return $this->hasMany(Auther::class);
     }
