@@ -58,7 +58,8 @@ class BooksController extends Controller {
                 foreach ($genreHtml->find('table.tableList tr') as $row) {
                     $bookUri = $row->children(2)->children(0)->href;
 //                  code to get the books details from the goodreads
-                    $bookHtml = new \Htmldom("https://www.goodreads.com/book/show/11870085-the-fault-in-our-stars");
+                    $bookHtml = new \Htmldom("https://www.goodreads.com$bookUri");
+
 //  inserting book title to DB 
                     $book->title = $bookHtml->find('h1[id=bookTitle]', 0)->plaintext;
 //  inserting   book cover
@@ -72,23 +73,27 @@ class BooksController extends Controller {
 //  inserting the rating to DB 
                     $book->rating = $bookHtml->find('span[class=average]', 0)->plaintext;
 //  inserting the isbn to DB
-                    if ($bookHtml->find('div[class=infoBoxRowItem]', 1)) {
-                        $book->isbn = $bookHtml->find('div[class=infoBoxRowItem]', 1)->plaintext;
-                    } else {
-                        $book->isbn = $isbn = $bookHtml->find('div[class=infoBoxRowItem]', 1)->children(0)->children(0)->plaintext;
+
+                    $book->isbn = $bookHtml->find('div[id=bookDataBox]', 0)->children(1)->children(1)->plaintext;
+
+                    if (strlen($book->isbn) > 13) {
+                        $book->isbn = explode(')', explode(':', $book->isbn)[1])[0];
                     }
-//                       $book->save();
+                    $isbnCount = DB::table('books')->where('isbn', $book->isbn)->count();
+                    if ($isbnCount == 0) {
+                        $book->save();
+                    }
 
                     $autherUri = $bookHtml->find('a[class=authorName]', 0)->href;
                     $splitedAutherId = explode('/', $autherUri);
                     $autherId = explode('.', $splitedAutherId[5])[0];
-                    $goodreadsAutherId = DB::table('authers')->where('goodreads_auther_id',$autherId)->count();
-                    if ($goodreadsAutherId == 0) {
+                    $goodreadsAutherIdCount = DB::table('authers')->where('goodreads_auther_id', $autherId)->count();
+                    if ($goodreadsAutherIdCount == 0) {
                         $auther = new Auther;
                         $autherHtml = new \Htmldom($autherUri);
 //        code to get the authers details from goodreads
 //  inserting the auther name to the DB
-                        $auther->name =  $autherHtml->find('h1[class=authorName]', 0)->plaintext;
+                        $auther->name = $autherHtml->find('h1[class=authorName]', 0)->plaintext;
 //  inserting the auther image to the DB 
                         $auther->image = $autherHtml->find('div[class=leftContainer authorLeftContainer]', 0)->children(0)->children(0)->src;
 //  inserting the $autherDescription to the DB
@@ -99,7 +104,7 @@ class BooksController extends Controller {
                         }
 //  inserting goodreads_auther_id to DB
                         $auther->goodreads_auther_id = $autherId;
-                        $auther->save();
+//                            $auther->save();
                     }
                 }
             }
