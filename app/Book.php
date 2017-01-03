@@ -9,7 +9,7 @@ class Book extends Model
 
     public function authers()
     {
-        return $this->hasMany(Auther::class);
+        return $this->belongsToMany(Auther::class);
     }
 
     public function users()
@@ -23,6 +23,10 @@ class Book extends Model
         return (auth()->check()) ? in_array($this->id, auth()->user()->books->pluck('id')->toArray()) : false;
     }
 
+    public function genres() {
+       return $this->belongsToMany('App\Genre');
+    }
+    
     public static function comparingCoordinates($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
     {
         // convert from degrees to radians

@@ -26,7 +26,7 @@ class AddingColumnAutherIdToAuthersTable extends Migration
     public function down()
     {
        Schema::table('authers',function(Blueprint $table){
-           $bable->dropColumn('goodreads_auther_id');
+           $table->dropColumn('goodreads_auther_id');
        });
     }
 }

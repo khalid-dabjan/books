@@ -44,10 +44,8 @@ class BooksController extends Controller {
         $user->unreadNotifications()->markAsRead();
     }
 
-    public function getDom() { // this method to save the data from goodreads to the database for both book/authers 
-        $book = new Book;
-//       remember to find a way to get the rest of the list PAGES 
-        $html = new \Htmldom('https://www.goodreads.com/tag/popular/list?page=1');
+    public static function booksUrlExtractor($uri) {
+        $html = new \Htmldom($uri);
         $ul = $html->find('ul[class=tagList greyText]', 0);
         foreach ($ul->find('li') as $li) {
             $tagUri = $li->children(0)->href;
@@ -57,56 +55,96 @@ class BooksController extends Controller {
                 $genreHtml = new\Htmldom("https://www.goodreads.com$genreUri");
                 foreach ($genreHtml->find('table.tableList tr') as $row) {
                     $bookUri = $row->children(2)->children(0)->href;
-//                  code to get the books details from the goodreads
+                    //                  code to get the books details from the goodreads
                     $bookHtml = new \Htmldom("https://www.goodreads.com$bookUri");
+                }
+            }
+        }
+    }
+
+    public function aquiringBooks() { // this method to save the data from goodreads to the database for both book/authers 
+        $genreHtml = new\Htmldom("https://www.goodreads.com/list/show/10762.Best_Book_Boyfriends");
+        foreach ($genreHtml->find('table.tableList tr') as $row) {
+            $bookUri = $row->children(2)->children(0)->href;
+            //                  code to get the books details from the goodreads
+            $bookHtml = new \Htmldom("https://www.goodreads.com$bookUri");
+
+            $isbnCount = DB::table('books')->where('isbn', $bookHtml->find('div[id=bookDataBox]', 0)->children(1)->children(1)->plaintext)->count();
+            if ($isbnCount == 0) {
+                $book = new Book;
+                $autherUri = $bookHtml->find('a[class=authorName]', 0)->href;
+                $splitedAutherId = explode('/', $autherUri);
+                $goodreadsAutherId = explode('.', $splitedAutherId[5])[0];
+                $autherId = DB::table('authers')->where('goodreads_auther_id', $goodreadsAutherId)->value('id');
 
 //  inserting book title to DB 
-                    $book->title = $bookHtml->find('h1[id=bookTitle]', 0)->plaintext;
+                $book->title = $bookHtml->find('h1[id=bookTitle]', 0)->plaintext;
 //  inserting   book cover
-                    $book->cover = $bookHtml->find('img[id=coverImage]', 0)->src;
+                $book->cover = $bookHtml->find('img[id=coverImage]', 0)->src;
 //  inserting the description to DB
-                    if ($bookHtml->find('div[id=description]', 0)->children(1)) {
-                        $book->description = $bookHtml->find('div[id=description]', 0)->children(1)->plaintext;
-                    } else {
-                        $book->description = $bookHtml->find('div[id=description]', 0)->children(0)->plaintext;
-                    }
+                if ($bookHtml->find('div[id=description]', 0)->children(1)) {
+                    $book->description = $bookHtml->find('div[id=description]', 0)->children(1)->plaintext;
+                } else {
+                    $book->description = $bookHtml->find('div[id=description]', 0)->children(0)->plaintext;
+                }
 //  inserting the rating to DB 
-                    $book->rating = $bookHtml->find('span[class=average]', 0)->plaintext;
+                $book->rating = $bookHtml->find('span[class=average]', 0)->plaintext;
 //  inserting the isbn to DB
 
-                    $book->isbn = $bookHtml->find('div[id=bookDataBox]', 0)->children(1)->children(1)->plaintext;
+                $book->isbn = $bookHtml->find('div[id=bookDataBox]', 0)->children(1)->children(1)->plaintext;
 
-                    if (strlen($book->isbn) > 13) {
-                        $book->isbn = explode(')', explode(':', $book->isbn)[1])[0];
-                    }
-                    $isbnCount = DB::table('books')->where('isbn', $book->isbn)->count();
-                    if ($isbnCount == 0) {
-                        $book->save();
-                    }
+                if (strlen($book->isbn) > 13) {
+                    $book->isbn = explode(')', explode(':', $book->isbn)[1])[0];
+                }
 
-                    $autherUri = $bookHtml->find('a[class=authorName]', 0)->href;
-                    $splitedAutherId = explode('/', $autherUri);
-                    $autherId = explode('.', $splitedAutherId[5])[0];
-                    $goodreadsAutherIdCount = DB::table('authers')->where('goodreads_auther_id', $autherId)->count();
-                    if ($goodreadsAutherIdCount == 0) {
-                        $auther = new Auther;
-                        $autherHtml = new \Htmldom($autherUri);
-//        code to get the authers details from goodreads
-//  inserting the auther name to the DB
-                        $auther->name = $autherHtml->find('h1[class=authorName]', 0)->plaintext;
-//  inserting the auther image to the DB 
-                        $auther->image = $autherHtml->find('div[class=leftContainer authorLeftContainer]', 0)->children(0)->children(0)->src;
-//  inserting the $autherDescription to the DB
-                        if ($autherHtml->find('div[class=aboutAuthorInfo]', 0)->children(3)) {
-                            $auther->description = $autherHtml->find('div[class=aboutAuthorInfo]', 0)->children(3)->plaintext;
-                        } else {
-                            $auther->description = $autherHtml->find('div[class=aboutAuthorInfo]', 0)->children(2)->plaintext;
-                        }
-//  inserting goodreads_auther_id to DB
-                        $auther->goodreads_auther_id = $autherId;
-//                            $auther->save();
+                $book->save();
+                if (DB::table('auther_book')->where('auther_id', $autherId)->where('book_id', $book->id)->count() == 0) {
+                    $book->authers()->attach($autherId);
+                }
+                    foreach ($bookHtml->find('a[class=actionLinkLite bookPageGenreLink]') as $bookGenre) {
+                        $genreId = DB::table('genres')->where("name", $bookGenre->plaintext)->value('id');
+                if(DB::table('book_genre')->where('book_id', $book->id)->where('genre_id', $genreId)->count() == 0) {
+                        $book->genres()->attach($genreId);
                     }
                 }
+            }
+        }
+    }
+
+    public function aquiringAuthers() {
+        $genreHtml = new\Htmldom("https://www.goodreads.com/list/show/10762.Best_Book_Boyfriends");
+        foreach ($genreHtml->find('table.tableList tr') as $row) {
+            $bookUri = $row->children(2)->children(0)->href;
+//                           code to get the books details from the goodreads
+            $bookHtml = new \Htmldom("https://www.goodreads.com$bookUri");
+            $autherUri = $bookHtml->find('a[class=authorName]', 0)->href;
+            $splitedAutherId = explode('/', $autherUri);
+            $autherId = explode('.', $splitedAutherId[5])[0];
+            $goodreadsAutherIdCount = DB::table('authers')->where('goodreads_auther_id', $autherId)->count();
+            if ($goodreadsAutherIdCount == 0) {
+                $auther = new Auther;
+                $autherHtml = new \Htmldom($autherUri);
+//        code to get the authers details from goodreads
+//  inserting the auther name to the DB
+                $auther->name = $autherHtml->find('h1[class=authorName]', 0)->plaintext;
+
+//  inserting the auther image to the DB 
+                if ($autherHtml->find('div[class=leftContainer authorLeftContainer]', 0)->children(0)->src == "https://s.gr-assets.com/assets/nophoto/user/f_200x266-3061b784cc8e7f021c6430c9aba94587.png") {
+                    $auther->image = $autherHtml->find('div[class=leftContainer authorLeftContainer]', 0)->children(0)->src;
+                } else {
+                    $imgUrl = $autherHtml->find('div[class=leftContainer authorLeftContainer]', 0)->children(0)->href;
+                    $img = new \Htmldom("https://www.goodreads.com$imgUrl");
+                    $auther->image = $img->find('img', 0)->src;
+                }
+//  inserting the $autherDescription to the DB
+                if ($autherHtml->find('div[class=aboutAuthorInfo]', 0)->children(3)) {
+                    $auther->description = $autherHtml->find('div[class=aboutAuthorInfo]', 0)->children(3)->plaintext;
+                } else {
+                    $auther->description = $autherHtml->find('div[class=aboutAuthorInfo]', 0)->children(2)->plaintext;
+                }
+//  inserting goodreads_auther_id to DB
+                $auther->goodreads_auther_id = $autherId;
+                $auther->save();
             }
         }
     }

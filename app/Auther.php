@@ -8,7 +8,7 @@ class Auther extends Model
 {
     
     public function books() {
-      return   $this->hasMany('App\Book');
+      return   $this->belongsToMany('App\Book');
     }
     public function users() {
        return $this->belongsToMany('App\User','followers_users','followee_id','follower_id')->withPivot('type');

@@ -29,9 +29,10 @@ Route::post('booksList/{book}/add',"BooksController@addBook");
 Route::delete('booksList/{book}/delete',"BooksController@deleteBook");
 Route::get('matchMaking',"BooksController@comparingBooks");
 
+Route::get('aquiringBooks','BooksController@aquiringBooks');
+Route::get('aquiringAuthers','BooksController@aquiringAuthers');
 
-Route::get('dom','BooksController@getDom');
-
+Route::get('genres','GenresController@getGenres');
 
 Route::get('usersList/{auther}/autherProfile',"AuthersController@getAutherProfile");
 Route::post('usersList/{auther}/autherFollowing',"AuthersController@autherFollowing");
