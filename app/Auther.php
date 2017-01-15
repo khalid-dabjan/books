@@ -11,7 +11,7 @@ class Auther extends Model
       return   $this->belongsToMany('App\Book');
     }
     public function users() {
-       return $this->belongsToMany('App\User','followers_users','followee_id','follower_id')->withPivot('type');
+       return $this->belongsToMany('App\User');
     }
     
     public function getUserIsFollowingAutherAttribute() {

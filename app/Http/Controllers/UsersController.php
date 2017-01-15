@@ -9,7 +9,6 @@ use App\Location;
 use Illuminate\Http\Request;
 use App\Notifications\BookMatch;
 
-
 class UsersController extends Controller {
 
     public function __construct() {
@@ -17,7 +16,9 @@ class UsersController extends Controller {
     }
 
     public function getUpdateProfile() {
-        return view('users.updateProfile');
+        $user = auth()->user();
+        $locations = $user->locations;
+        return view('users.updateProfile', compact('locations', 'user'));
     }
 
     public function getAddresses() {
@@ -84,19 +85,17 @@ class UsersController extends Controller {
     public function getUsersList() {
         $users = User::get();
         $authers = Auther::get();
-        return view('users.usersList', compact('users','authers'));
+        return view('users.usersList', compact('users', 'authers'));
     }
 
     public function getUserProfile(User $user) {
         $books = $user->books;
-
-
         return view('users.userProfile', compact('user', 'books'));
     }
 
     public function theFollowing(Request $request, User $user) {
         $followerId = auth()->user()->id;
-        
+
 
         if ($followerId == $user->id) {
             abort(403, ' Unautherized Action.');
@@ -108,7 +107,5 @@ class UsersController extends Controller {
         }
         return redirect('/home');
     }
-
-    
 
 }
