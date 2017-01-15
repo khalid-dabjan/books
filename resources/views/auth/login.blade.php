@@ -1,68 +1,48 @@
-@extends('layouts.app')
+@extends('layouts.entry')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-                        {{ csrf_field() }}
+<div class="inv-blog-post-form container" >
+    <form  role="form" method="POST" action="{{ url('/login') }}">
+        {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+        <div class="inv-blog-post-form input{{ $errors->has('email') ? ' has-error' : '' }}">
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+            <input  id="email" type="email" class="inv-blog-post-form input" name="email" placeholder='Email Address' value="{{ old('email') }}" required autofocus>
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember"> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">
-                                    Forgot Your Password?
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            @if ($errors->has('email'))
+            <span class="help-block">
+                <strong>{{ $errors->first('email') }}</strong>
+            </span>
+            @endif
         </div>
+
+        <div class="inv-blog-post-form input{{ $errors->has('password') ? ' has-error' : '' }}">
+
+            <input id="password" type="password" class="inv-blog-post-form input" placeholder='Password' name="password" required>
+
+            @if ($errors->has('password'))
+            <span class="help-block">
+                <strong>{{ $errors->first('password') }}</strong>
+            </span>
+            @endif
+        </div>
+        <div class='input-group-btn'>
+            <button type="submit" class="group-button" >
+                Login
+            </button>
+        </div>
+
+
+    </form>
+    <div class="inv-poput-link">
+        <a href="{{ url('/password/reset') }}" class="fa-adjust bg10">Forgot Your Password?</a>
+        <span>or</span>
+        <a href="{{ url('/facebook') }}" class="fa fa-facebook bg18">Sign in With Facebook</a>
+        <a href="{{ url('/google') }}" class="fa fa-google bg17">Sign in With Google</a>
+        <a href="{{ url('/twitter') }}" class="fa fa-twitter bg20">Sign in With twitter</a>
     </div>
 </div>
+
+
+
 @endsection

@@ -65,7 +65,7 @@ class User extends Authenticatable
 
     public function authers()
     {
-        return $this->belongstoMany(Auther::class, 'followers_users', 'follower_id', 'followee_id')->withPivot('type');
+        return $this->belongstoMany(Auther::class);
     }
 
     public function myNotify($instance)

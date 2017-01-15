@@ -13,7 +13,11 @@ class CreateAutherBookTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('auther_book',function(Blueprint $table){
+            $table->increments('id');
+            $table->integer('auther_id')->unsigned()->index();
+            $table->integer('book_id')->unsigned()->index();
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ class CreateAutherBookTable extends Migration
      */
     public function down()
     {
-        //
+       Schema::dropIfExists('auther_book');
     }
 }

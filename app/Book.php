@@ -4,27 +4,26 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Book extends Model
-{
+class Book extends Model {
 
-    public function authers()
-    {
-        return $this->hasMany(Auther::class);
+    public function authers() {
+        return $this->belongsToMany(Auther::class);
     }
 
-    public function users()
-    {
+    public function users() {
         return $this->belongsToMany(User::class, 'books_users')->withPivot('status');
     }
 
-    public function getUserHasItAttribute()
-    {
+    public function getUserHasItAttribute() {
 
         return (auth()->check()) ? in_array($this->id, auth()->user()->books->pluck('id')->toArray()) : false;
     }
 
-    public static function comparingCoordinates($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
-    {
+    public function genres() {
+        return $this->belongsToMany(Genre::class);
+    }
+
+    public static function comparingCoordinates($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000) {
         // convert from degrees to radians
         $latFrom = deg2rad($latitudeFrom);
         $lonFrom = deg2rad($longitudeFrom);

@@ -49,6 +49,7 @@ use RegistersUsers;
                     'name' => 'required|max:255',
                     'email' => 'required|email|max:255|unique:users',
                     'password' => 'required|min:6|confirmed',
+                    
         ]);
     }
 
@@ -62,7 +63,7 @@ use RegistersUsers;
         return User::create([
                     'name' => $data['name'],
                     'email' => $data['email'],
-                    'password' => bcrypt($data['password']),
+                    'password' => bcrypt($data['password']),                    
         ]);
     }
 
@@ -84,9 +85,7 @@ use RegistersUsers;
             return redirect('home');
         }
         
-        
-        
-        $user->provider_id = $providerUser->getId();
+       $user->provider_id = $providerUser->getId();
         $user->name = $providerUser->getName();
         $user->email = $providerUser->getEmail();
         $user->registered_from = 'facebook';
